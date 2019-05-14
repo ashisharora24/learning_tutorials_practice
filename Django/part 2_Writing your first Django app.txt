@@ -1,0 +1,141 @@
+Database setup
+open up mysite/settings.py
+
+By default, the configuration uses SQLite. 
+
+ENGINE – 
+	'django.db.backends.sqlite3'
+	'django.db.backends.postgresql',
+	'django.db.backends.mysql'
+	'django.db.backends.oracle'
+	
+NAME – 
+The name of your database. 
+If you’re using SQLite, the database will be a file on your computer.
+In that case, NAME should be the full absolute path, including filename, of that file.
+ 
+The default value, os.path.join(BASE_DIR, 'db.sqlite3'), will store the file in your project directory.
+
+additional settings such as 
+	USER
+	PASSWORD 
+	HOST 
+must be added.
+
+-------------------------------------------------------------------------------------------------
+Creating models
+Now we’ll define your models – essentially, your database layout, with additional metadata.
+
+Philosophy
+
+Edit the polls/models.py file so it looks like this:
+
+polls/models.py¶
+from django.db import models
+
+
+class Question(models.Model):
+    question_text = models.CharField(max_length=200)
+    pub_date = models.DateTimeField('date published')
+
+
+class Choice(models.Model):
+    question = models.ForeignKey(Question, on_delete=models.CASCADE)
+    choice_text = models.CharField(max_length=200)
+    votes = models.IntegerField(default=0)
+-------------------------------------------------------------------------------------------------
+Now Django knows to include the polls app. Let’s run another command:
+
+
+$ python manage.py makemigrations polls
+You should see something similar to the following:
+
+Migrations for 'polls':
+  polls/migrations/0001_initial.py:
+    - Create model Choice
+    - Create model Question
+    - Add field question to choice
+	
+There’s a command that will run the migrations for you and manage your database schema automatically - that’s called migrate, and we’ll come to it in a moment - but first, let’s see what SQL that migration would run. The sqlmigrate command takes migration names and returns their SQL:
+
+
+$ python manage.py sqlmigrate polls 0001
+You should see something similar to the following (we’ve reformatted it for readability):
+
+BEGIN;
+--
+-- Create model Choice
+--
+CREATE TABLE "polls_choice" (
+    "id" serial NOT NULL PRIMARY KEY,
+    "choice_text" varchar(200) NOT NULL,
+    "votes" integer NOT NULL
+);
+--
+-- Create model Question
+--
+CREATE TABLE "polls_question" (
+    "id" serial NOT NULL PRIMARY KEY,
+    "question_text" varchar(200) NOT NULL,
+    "pub_date" timestamp with time zone NOT NULL
+);
+--
+-- Add field question to choice
+--
+ALTER TABLE "polls_choice" ADD COLUMN "question_id" integer NOT NULL;
+ALTER TABLE "polls_choice" ALTER COLUMN "question_id" DROP DEFAULT;
+CREATE INDEX "polls_choice_7aa0f6ee" ON "polls_choice" ("question_id");
+ALTER TABLE "polls_choice"
+  ADD CONSTRAINT "polls_choice_question_id_246c99a640fbbd72_fk_polls_question_id"
+    FOREIGN KEY ("question_id")
+    REFERENCES "polls_question" ("id")
+    DEFERRABLE INITIALLY DEFERRED;
+
+COMMIT;
+-------------------------------------------------------------------------------------------------
+Now, run migrate again to create those model tables in your database:
+
+$ python manage.py migrate
+Operations to perform:
+  Apply all migrations: admin, auth, contenttypes, polls, sessions
+Running migrations:
+  Rendering model states... DONE
+  Applying polls.0001_initial... OK
+------------------------------------------------------------------------------------------------- 
+Migrations are very powerful and let you change your models over time, as you develop your project, without the need to delete your database or tables and make new ones - it specializes in upgrading your database live, without losing data. We’ll cover them in more depth in a later part of the tutorial, but for now, remember the three-step guide to making model changes:
+
+Change your models (in models.py).
+1. Run python manage.py makemigrations to create migrations for those changes
+2. Run python manage.py migrate to apply those changes to the database.
+------------------------------------------------------------------------------------------------- 
+Creating an admin user¶
+First we’ll need to create a user who can login to the admin site. Run the following command:
+
+$ python manage.py createsuperuser
+Enter your desired username and press enter.
+
+Username: admin
+You will then be prompted for your desired email address:
+
+Email address: admin@example.com
+The final step is to enter your password. You will be asked to enter your password twice, the second time as a confirmation of the first.
+
+Password: **********
+Password (again): *********
+Superuser created successfully.
+------------------------------------------------------------------------------------------------- 
+Start the development server¶
+The Django admin site is activated by default. Let’s start the development server and explore it.
+
+If the server is not running start it like so:
+
+$ python manage.py runserver
+Now, open a Web browser and go to “/admin/” on your local domain – e.g., http://127.0.0.1:8000/admin/. You should see the admin’s login screen:
+
+-------------------------------------------------------------------------------------------------
+Make the poll app modifiable in the admin
+
+polls/admin.py¶
+from django.contrib import admin
+from .models import Question
+admin.site.register(Question)

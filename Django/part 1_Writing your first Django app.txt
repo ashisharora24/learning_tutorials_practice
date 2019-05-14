@@ -1,0 +1,118 @@
+Creating a project¶
+    $ django-admin startproject mysite
+
+
+  Let’s look at what startproject created:
+        mysite/
+            manage.py
+            mysite/
+                __init__.py
+                settings.py
+                urls.py
+                wsgi.py
+________________________________________________________________________________________________________________________________________________________
+________________________________________________________________________________________________________________________________________________________
+
+The development server¶
+Let’s verify your Django project works. Change into the outer mysite directory, if you haven’t already, and run the following commands:
+        $ python manage.py runserver
+
+You’ll see the following output on the command line:
+
+  Performing system checks...
+
+  System check identified no issues (0 silenced).
+
+  You have unapplied migrations; your app may not work properly until they are applied.
+  Run 'python manage.py migrate' to apply them.
+
+  May 08, 2019 - 15:50:53
+  Django version 2.2, using settings 'mysite.settings'
+  Starting development server at http://127.0.0.1:8000/
+  Quit the server with CONTROL-C.
+________________________________________________________________________________________________________________________________________________________
+________________________________________________________________________________________________________________________________________________________
+Changing the port
+
+  By default, the runserver command starts the development server on the internal IP at port 8000.
+
+  If you want to change the server’s port, pass it as a command-line argument. For instance, this command starts the server on port 8080:
+
+
+  $ python manage.py runserver 8080
+  If you want to change the server’s IP, pass it along with the port. For example, to listen on all available public IPs (which is useful if you are running Vagrant or want to show off your work on other computers on the network), use:
+
+
+  $ python manage.py runserver 0:8000
+  0 is a shortcut for 0.0.0.0. Full docs for the development server can be found in the runserver reference.
+________________________________________________________________________________________________________________________________________________________
+________________________________________________________________________________________________________________________________________________________
+
+Creating FIRST APP "the Polls app"
+
+To create your app, make sure you’re in the same directory as manage.py and type this command:
+
+
+$ python manage.py startapp polls
+That’ll create a directory polls, which is laid out like this:
+
+polls/
+    __init__.py
+    admin.py
+    apps.py
+    migrations/
+        __init__.py
+    models.py
+    tests.py
+    views.py
+---------------------------------------------------------------------------------------------------------
+
+Write your first view
+Let’s write the first view. Open the file polls/views.py and put the following Python code in it:
+
+polls/views.py
+from django.http import HttpResponse
+
+
+def index(request):
+    return HttpResponse("Hello, world. You're at the polls index.")
+This is the simplest view possible in Django. To call the view, we need to map it to a URL - and for this we need a URLconf.
+---------------------------------------------------------------------------------------------------------
+To create a URLconf in the polls directory, create a file called urls.py. Your app directory should now look like:
+
+polls/
+    __init__.py
+    admin.py
+    apps.py
+    migrations/
+        __init__.py
+    models.py
+    tests.py
+    urls.py
+    views.py
+In the polls/urls.py file include the following code:
+---------------------------------------------------------------------------------------------------------
+polls/urls.py
+from django.urls import path
+
+from . import views
+
+urlpatterns = [
+    path('', views.index, name='index'),
+]
+
+
+The next step is to point the root URLconf at the polls.urls module. In mysite/urls.py, add an import for django.urls.include and insert an include() in the urlpatterns list, so you have:
+
+mysite/urls.py
+from django.contrib import admin
+from django.urls import include, path
+
+urlpatterns = [
+    path('polls/', include('polls.urls')),
+    path('admin/', admin.site.urls),
+]
+---------------------------------------------------------------------------------------------------------
+$ python manage.py runserver
+http://127.0.0.1:8000/polls/
+---------------------------------------------------------------------------------------------------------
