@@ -19,6 +19,15 @@
 # 0
 
 def check_array_rotation(arr,n):
+    counter=0
+    while True:
+        if arr[0]>=arr[-1]:
+            counter+=1
+            element=arr.pop(0)
+            arr.append(element)
+        else:
+            break
+    return counter
 
 
 
