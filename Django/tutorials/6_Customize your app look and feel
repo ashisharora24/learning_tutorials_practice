@@ -1,0 +1,10 @@
+polls/static/polls/style.css¶
+li a {
+    color: green;
+}
+Next, add the following at the top of polls/templates/polls/index.html:
+
+polls/templates/polls/index.html¶
+{% load static %}
+
+<link rel="stylesheet" type="text/css" href="{% static 'polls/style.css' %}">

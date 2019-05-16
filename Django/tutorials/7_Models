@@ -1,0 +1,80 @@
+from django.db import models
+
+class Person(models.Model):
+    first_name = models.CharField(max_length=30)
+    release_date = models.DateField()
+    num_stars = models.IntegerField()
+
+=========================================================================================================
+    from django.db import models
+
+    class Musician(models.Model):
+        first_name = models.CharField(max_length=50)
+        last_name = models.CharField(max_length=50)
+        instrument = models.CharField(max_length=100)
+
+    class Album(models.Model):
+        artist = models.ForeignKey(Musician, on_delete=models.CASCADE)
+        name = models.CharField(max_length=100)
+        release_date = models.DateField()
+        num_stars = models.IntegerField()
+=========================================================================================================
+Field options
+
+A choices list looks like this:
+
+YEAR_IN_SCHOOL_CHOICES = (
+    ('FR', 'Freshman'),
+    ('SO', 'Sophomore'),
+    ('JR', 'Junior'),
+    ('SR', 'Senior'),
+    ('GR', 'Graduate'),
+)
+The first element in each tuple is the value that will be stored in the database. The second element is displayed by the field’s form widget.
+
+Given a model instance, the display value for a field with choices can be accessed using the get_FOO_display() method. For example:
+
+from django.db import models
+
+class Person(models.Model):
+    SHIRT_SIZES = (
+        ('S', 'Small'),
+        ('M', 'Medium'),
+        ('L', 'Large'),
+    )
+    name = models.CharField(max_length=60)
+    shirt_size = models.CharField(max_length=1, choices=SHIRT_SIZES)
+=========================================================================================================
+Automatic primary key fields¶
+By default, Django gives each model the following field:
+
+id = models.AutoField(primary_key=True)
+=========================================================================================================
+Many-to-one relationships¶
+To define a many-to-one relationship, use django.db.models.ForeignKey.
+You use it just like any other Field type: by including it as a class attribute of your model.
+ForeignKey requires a positional argument: the class to which the model is related.
+For eample, if a Car model has a Manufacturer – that is, a Manufacturer makes multiple cars but each Car only has one Manufacturer – use the following definitions:
+
+from django.db import models
+
+class Manufacturer(models.Model):
+    # ...
+    pass
+
+class Car(models.Model):
+    manufacturer = models.ForeignKey(Manufacturer, on_delete=models.CASCADE)
+    # ...
+You can also create recursive relationships (an object with a many-to-one relationship to itself) and
+relationships to models not yet defined; see the model field reference for details.
+
+It’s suggested, but not required, that the name of a ForeignKey field (manufacturer in the example above) be the name of the mode
+l, lowercase. You can, of course, call the field whatever you want. For example:
+
+class Car(models.Model):
+    company_that_makes_it = models.ForeignKey(
+        Manufacturer,
+        on_delete=models.CASCADE,
+    )
+    # ...
+=========================================================================================================
