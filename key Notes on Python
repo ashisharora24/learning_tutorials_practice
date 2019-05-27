@@ -1,0 +1,14 @@
+-----------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------
+Recursion:
+there is a limit set to the recursion.
+the limit is that there is a limit set to the number of resursion that would be running
+and this limit is set by the individual machine.
+depending on the configuration of the machine
+
+this limit could be changed
+syntax:
+import sys
+sys.setrecursionlimit(2000)
+-----------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------
