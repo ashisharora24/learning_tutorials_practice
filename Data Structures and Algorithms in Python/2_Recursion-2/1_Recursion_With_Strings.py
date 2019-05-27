@@ -17,5 +17,5 @@ def replace_char_in_string(str,a,b):
         return b+output
     else:
         return str[0]+output
-        
+
 print(replace_char_in_string("ashhhh","h","t"))
