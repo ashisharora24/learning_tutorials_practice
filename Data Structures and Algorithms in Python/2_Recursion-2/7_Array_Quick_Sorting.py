@@ -1,34 +1,37 @@
-def quick_sorting(arr,start,len):
-    end=start+len-1
+def partation(arr,start,end):
     if start>=end:
-        # print("existing now. base case meet")
         return
+    pivot=arr[start]
+    count=0
+    for i in range(start,end+1):
+        if arr[i]<pivot:
+            count+=1
+    arr[start],arr[start+count]=arr[start+count],arr[start]
+    pivot_index=start+count
     i=start
-    j=i+1
-    # print("-----while loop starts-------")
-    while j<=end:
-        # print ("if arr[i]>arr[j]")
-        # print ("arr[i] : ",arr[i] )
-        # print ("arr[J] : ",arr[j] )
-
-        if arr[i]>arr[j]:
-            #print ("---True----")
-            temp_val=arr[j]
-            t=j
-            while t>i:
-                arr[t]=arr[t-1]
-                t-=1
-            arr[i]=temp_val
+    j=end
+    while i<j:
+        if arr[i]<pivot:
+            i=i+1
+        elif arr[j]>=pivot:
+            j=j-1
+        else:
+            arr[i],arr[j]=arr[j],arr[i]
             i+=1
-            #print(arr)
-        j+=1
-    # len=(((i-1)-start)+1)
-    quick_sorting(arr,start,(((i-1)-start)+1))
-    #start=i+1
-    #len=((end-(i+1))+1)
-    quick_sorting(arr,i+1,((end-(i+1))+1))
+            j-=1
+    return pivot_index
+
+
+
+def quick_sorting(arr,start,end):
+    if start>=end:
+        return
+    pivot = partation(arr,start,end)
+    quick_sorting(arr,start,pivot-1)
+    quick_sorting(arr,pivot+1,end)
+
 
 arr=[3,5,1,2,15,2,8,7]
 print(arr)
-quick_sorting(arr,0,len(arr))
+quick_sorting(arr,0,len(arr)-1)
 print(arr)
