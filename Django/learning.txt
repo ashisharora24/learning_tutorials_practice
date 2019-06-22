@@ -1,0 +1,107 @@
+
+Makemigrations :  changes sql--> ek file mein
+which is a migrations file
+
+migrate :
+same file is applied to DB
+
+runserver :
+
+-------------------------------
+<a hre="{% urls f %}">parent name</a>
+URLS
+
+from django.contrib import admin
+from django.urls import include, path
+
+urlpatterns = [
+    # path('polls/', include('polls.urls')),
+    path('admin/', admin.site.urls),
+    path('polls/<abcd>/', include('django.contrib.auth.urls')),
+]
+
+
+urlpatterns = [
+    path('articles/2003/', views.special_case_2003),
+    path('articles/<int:year>/<int:month>/<slug:slug>/', views.article_detail),
+    href=""
+]
+
+# View (in blog/views.py)
+def page(request, year=1,month,slug):
+    # Output the appropriate page of blog entries, according to num.
+-------------------------------------------------------------------
+
+class based view :
+from django.views.generic import DetailView
+from books.models import Book, Publisher
+
+class PublisherDetail(DetailView):
+
+    model = Publisher
+
+    def get_context_data(self, **kwargs):
+        # Call the base implementation first to get a context
+        context = super().get_context_data(**kwargs)
+        # Add in a QuerySet of all the books
+        context['book_list'] = Book.objects.all()
+        return context
+
+-------------------------------------------------------------------
+        rom django.http import HttpResponse
+
+        def my_view(request):
+            if request.method == 'GET':
+                # <view logic>
+                return HttpResponse('result')
+        In a class-based view, this would become:
+
+        from django.http import HttpResponse
+        from django.views import View
+
+        class MyView(View):
+            def get(self, request):
+                # <view logic>
+                return HttpResponse('result')
+-------------------------------------------------------------------
+method:
+from django.http import Http404
+from django.shortcuts import render
+from polls.models import Poll
+
+def detail(request, poll_id):
+    try:
+        p = Poll.objects.get(pk=poll_id)
+    except Poll.DoesNotExist:
+        raise Http404("Poll does not exist")
+    return render(request, 'polls/detail.html', {'poll': p})
+
+    from django.http import HttpResponse
+    import datetime
+
+    def current_datetime(request):
+        now = datetime.datetime.now()
+        html = "<html><body>It is now %s.</body></html>" % now
+        return HttpResponse(html)
+-------------------------------------------------------------------
+class D
+  w e r
+class Publication(models.Model):
+    title = models.CharField(max_length=30)
+
+    class Meta:
+        ordering = ('title',)
+
+    def __str__(self):
+        return self.title
+
+        a
+        b
+        c
+
+class Article(models.Model):
+    headline = models.CharField(max_length=100)
+    publications = models.ManyToManyField(Publication)
+    a-p1,
+    a-p2
+    publications2 = models.ManyToManyField(D)
