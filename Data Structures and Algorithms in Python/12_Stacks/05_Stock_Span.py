@@ -16,9 +16,7 @@ def stockSpan(price,n):
             head = s
             head.next = temp
     while head:
-        print("----------------")
         currData = head.data
-        print("currData : ", currData)
         h = head
         count = 1
         while h.next:
@@ -31,6 +29,7 @@ def stockSpan(price,n):
         head = head.next
     #print(span)
     return span[::-1]
+
 
 n = int(input())
 price = [int(ele) for ele in input().split()]
