@@ -15,7 +15,7 @@ def skipMdeleteN(head, M, N):
     holderNode = None
     counter = 1
 
-    while head:
+    while head is not None:
         if counter == 1:
             if startNode is None:
                 startNode = head
@@ -27,11 +27,9 @@ def skipMdeleteN(head, M, N):
             counter = 0
         counter += 1
         head = head.next
-    print("counter : ", counter)
-    if counter < M:
-        return startClone
-    holderNode.next = None
-    return startNode
+    if holderNode.next is not None:
+        holderNode.next = None
+    return startClone
 
 
 def ll(arr):
