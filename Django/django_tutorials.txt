@@ -1,0 +1,42 @@
+1. Download from https://www.python.org/downloads/
+================================================================
+2. Verify Python Installed in Powershell
+Python 3.6.2
+================================================================
+Verify pip by entering:
+pip freeze
+================================================================
+Update Powershell Settings:
+You should only have to do this 1 time, if done correctly. 
+1. Search Windows Powershell (a search is important) 
+2. Right click, select "Run as Administrator"; cofirm security pop-up if needed 
+3. Enter:
+Set-ExecutionPolicy Unrestricted
+================================================================
+Create Dev Folder (directory):
+Open Windows Powershell (not needed to run as Admin now)
+Type:
+C:\ > cd ~/
+C:\ > mkdir Dev
+================================================================
+6. Install Virtualenv:
+	To install a virtual environment:
+		> pip install virtualenv
+	Verify:
+		> pip freeze
+		virtualenv==15.1.0
+================================================================
+cd ~/Dev
+cd cfehome
+
+Create virtualenv
+> virtualenv .
+
+Note, if you have two versions of python installed you may have to do this:
+> virtualenv -p python3 .
+
+to activate the virtual environment:
+ .\Scripts\activate
+> .\Scripts\activate
+(cfehome) > deactivate
+================================================================
