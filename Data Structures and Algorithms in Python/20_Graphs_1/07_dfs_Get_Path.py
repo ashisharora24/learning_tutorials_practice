@@ -6,82 +6,26 @@ class Graph:
     def __str__(self):
         return str(self.adjMatrix)
 
-    def __dfsHelper(self, cv, v, visited):
-        # print("cv : ", cv)
-        # print("v : ", v)
-        # print("visited : ", visited)
-        visited[cv] = True
-        if self.adjMatrix[cv][v] > 0:
-            if cv == 0:
-                return [v], visited
-            return [v, cv], visited
-        else:
-            for i in range(self.nVertices):
-                # print([cv],[i]," : ", self.adjMatrix[cv][i])
-                if (self.adjMatrix[cv][i] > 0 and visited[i] is False):
-                    # print("------------")
-                    # print(" cv : ", cv)
-                    # print(" i : ", i)
+    def __getPathDfs(self, v1, v2, visited):
+        visited[v1] = True
+        if v1 == v2:
+            return [v2]
 
-                    if i == v:
-                        visited[i] = True
-                        return [i, cv], visited
-                    output, visited = self.__dfsHelper(i, v, visited)
-                    if output is None:
-                        pass
-                    else:
-                        output.append(cv)
-                        return output, visited
-        return None, visited
-
-
-    def dfs(self, v1, v2):
-        visited = [False for i in range(self.nVertices)]
-        if (v1 == 0 and v2 != 0):
-            # print("DFS Case 1")
-            output, visited = self.__dfsHelper(0, v2, visited)
-            # print("Output : ", output)
-            if output is None:
-                return None
-            return output[::-1]
-        elif (v1 != 0 and v2 == 0):
-            # print("DFS Case 2")
-            output, visited = self.__dfsHelper(0, v1, visited)
-            # print("Output : ", output)
-            if output is None:
-                return None
-            return output
-        else:
-            # print("DFS Case 3")
-            output1, visited = self.__dfsHelper(0, v2, visited)
-            # print("Output1 : ", output1)
-            if output1 is None:
-                return None
-            else:
-                visited = [False for i in range(self.nVertices)]
-                for i in output1:
-                    visited[i] = True
-                output2, visited = self.__dfsHelper(0, v1, visited)
-                # print("Output2 : ", output2)
-                if output2 is None:
-                    return None
+        for i in range(self.nVertices):
+            if (self.adjMatrix[v1][i] > 0 and visited[i] is False):
+                output = self.__getPathDfs(i, v2, visited)
+                if output is None:
+                    pass
                 else:
-                    if len(output1) == 1:
-                        output1.append(0)
-                    output1.extend(output2[1::-1])
-                    # print("Output1 : ", output1)
-                    return output1
+                    output.append(v1)
+                    return output
+        return None
+
+
 
     def getPath(self, v1, v2):
-        if v1 == v2:
-            # print("GetPath Case 1")
-            return None
-        elif self.adjMatrix[v1][v2] > 0:
-            # print("GetPath case 2")
-            return [v2, v1]
-        else:
-            # print("GetPath case 3")
-            return self.dfs(v1, v2)
+        visited = [False for i in range(self.nVertices)]
+        return self.__getPathDfs(v1, v2, visited)
 
     def cotainsEdge(self, v1, v2):
         return True if self.adjMatrix[v1][v2] > 0 else False

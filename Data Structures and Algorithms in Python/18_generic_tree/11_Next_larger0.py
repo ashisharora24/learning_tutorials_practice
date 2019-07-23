@@ -31,24 +31,15 @@ def nextLargest(tree, n):
     q = queue.Queue()
     q.put(tree)
     maxN = None
-    max = 0
-    if tree.data > n:
-        maxN = tree
-        max = tree.data
-    ans = 0
-    ansN = None
+    max = 1000000
     while not(q.empty()):
         cNode = q.get()
-        if cNode.data < max:
-            ans = cNode.data
-            ansN = cNode
-        else:
-            max = cNode.data
+        if n < cNode.data < max:
             maxN = cNode
-
-        for child in tree.children:
+            max = cNode.data
+        for child in cNode.children:
             q.put(child)
-    return ansN
+    return maxN
 
 def createLevelWiseTree(arr):
     root = treeNode(int(arr[0]))
